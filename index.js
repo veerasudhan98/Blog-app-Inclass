@@ -17,12 +17,17 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true });
 const app = express();
 app.set("view engine", "ejs");
 
-//mainframe
+//middleware
 app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded());
 
 //Routes
-app.get("/", (req, res) => {
-  res.render("index"); //This is ejs/html file in views folder
+app.get("/", async (req, res) => {
+  const blogposts = await BlogPost.find({});
+  res.render("index", {
+    blogposts,
+  }); //This is ejs/html file in views folder
 });
 
 app.get("/about", (req, res) => {
@@ -33,58 +38,22 @@ app.get("/contact", (req, res) => {
   res.render("contact");
 });
 
-app.get("/post", (req, res) => {
-  res.render("post");
+app.get("/post/:id", async (req, res) => {
+  const blogpost = await BlogPost.findById(req.params.id);
+  res.render("post", {
+    blogpost,
+  });
+});
+app.get("/posts/new", (req, res) => {
+  res.render("create");
+});
+app.post("/posts/store", async (req, res) => {
+  await BlogPost.create(req.body, (error, blogpost) => {
+    console.log("new date create: ", blogpost, error);
+    res.redirect("/");
+  });
 });
 
-// CRUD Opertation
-
-// Create
-BlogPost.create(
-  {
-    title: "My first blog",
-    body: "I'm excited for it!",
-  },
-  (error, blogPost) => {
-    console.log(error, blogPost);
-  }
-);
-
-// Read data find, findById
-BlogPost.find(
-  {
-    title: /first/,
-  },
-  (error, blogpost) => {
-    console.log(error, blogpost);
-  }
-);
-
-// Read data find, findById
-BlogPost.findById(
-  {
-    _id: "63dd21f3e273b69c495be69f",
-  },
-  (error, blogpost) => {
-    console.log(error, blogpost);
-  }
-);
-
-// Update
-BlogPost.findByIdAndUpdate(
-  "63dd21f3e273b69c495be69f",
-  {
-    title: "The updated first blog",
-  },
-  (error, blogpost) => {
-    console.log(error, blogpost);
-  }
-);
-
-// Update
-BlogPost.findByIdAndDelete("63dd21f3e273b69c495be69f", (error, blogpost) => {
-  console.log(error, blogpost);
-});
 //Server
 app.listen(PORT, () => {
   console.log("listening on Port " + PORT);

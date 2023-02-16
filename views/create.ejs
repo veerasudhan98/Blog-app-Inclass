@@ -7,7 +7,7 @@
     <!-- Page Header-->
     <header
       class="masthead"
-      style="background-image: url('assets/img/contact-bg.jpg')"
+      style="background-image: url('/assets/img/contact-bg.jpg')"
     >
       <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -25,77 +25,46 @@
       <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-md-10 col-lg-8 col-xl-7">
-            <p>
-              Want to get in touch? Fill out the form below to send me a message
-              and I will get back to you as soon as possible!
-            </p>
             <div class="my-5">
-              <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+              <form
+                action="/posts/store"
+                method="post"
+                id="contactForm"
+                data-sb-form-api-token="API_TOKEN"
+              >
                 <div class="form-floating">
                   <input
                     class="form-control"
-                    id="name"
+                    id="title"
+                    name="title"
                     type="text"
-                    placeholder="Enter your name..."
+                    placeholder="Enter your title..."
                     data-sb-validations="required"
                   />
-                  <label for="name">Name</label>
+                  <label for="title">Title</label>
                   <div
                     class="invalid-feedback"
-                    data-sb-feedback="name:required"
+                    data-sb-feedback="title:required"
                   >
-                    A name is required.
+                    A title is required.
                   </div>
                 </div>
-                <div class="form-floating">
-                  <input
-                    class="form-control"
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email..."
-                    data-sb-validations="required,email"
-                  />
-                  <label for="email">Email address</label>
-                  <div
-                    class="invalid-feedback"
-                    data-sb-feedback="email:required"
-                  >
-                    An email is required.
-                  </div>
-                  <div class="invalid-feedback" data-sb-feedback="email:email">
-                    Email is not valid.
-                  </div>
-                </div>
-                <div class="form-floating">
-                  <input
-                    class="form-control"
-                    id="phone"
-                    type="tel"
-                    placeholder="Enter your phone number..."
-                    data-sb-validations="required"
-                  />
-                  <label for="phone">Phone Number</label>
-                  <div
-                    class="invalid-feedback"
-                    data-sb-feedback="phone:required"
-                  >
-                    A phone number is required.
-                  </div>
-                </div>
+
                 <div class="form-floating">
                   <textarea
                     class="form-control"
-                    id="message"
-                    placeholder="Enter your message here..."
+                    id="body"
+                    name="body"
+                    placeholder="Enter your description here..."
                     style="height: 12rem"
                     data-sb-validations="required"
                   ></textarea>
-                  <label for="message">Message</label>
+                  <label for="message">Description</label>
                   <div
                     class="invalid-feedback"
-                    data-sb-feedback="message:required"
+                    data-sb-feedback="body:required"
                   >
-                    A message is required.
+                    A description is required.
                   </div>
                 </div>
                 <br />
@@ -122,10 +91,10 @@
                     Error sending message!
                   </div>
                 </div>
-                <!-- Submit Button-->
+                <!-- Submit button -->
                 <button
                   class="btn btn-primary text-uppercase"
-                  id="submitButton"
+                  id="sendMessageButton"
                   type="submit"
                 >
                   Send
