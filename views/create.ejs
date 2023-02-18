@@ -30,7 +30,7 @@
                 action="/posts/store"
                 method="post"
                 id="contactForm"
-                data-sb-form-api-token="API_TOKEN"
+                enctype="multipart/form-data"
               >
                 <div class="form-floating">
                   <input
@@ -65,6 +65,25 @@
                     data-sb-feedback="body:required"
                   >
                     A description is required.
+                  </div>
+                </div>
+
+                <div class="form-floating">
+                  <input
+                    class="form-control"
+                    id="image"
+                    name="image"
+                    type="file"
+                    placeholder="Upload your image..."
+                    style="height: 12rem"
+                    data-sb-validations="required"
+                  ></input>
+                  <label for="image">Image</label>
+                  <div
+                    class="invalid-feedback"
+                    data-sb-feedback="image:required"
+                  >
+                    A image field is required.
                   </div>
                 </div>
                 <br />

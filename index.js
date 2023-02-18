@@ -1,60 +1,43 @@
-//Packages
-const { Router } = require("express");
+// Packages
 const express = require("express");
-const path = require("path");
-const ejs = require("ejs");
 const mongoose = require("mongoose");
+const fileUpload = require("express-fileupload");
 
-// Files model
-const BlogPost = require("./model/BlogPost");
+// Custom middleware
+const validateMiddleWare = require("./middleware/validationMiddleware");
 
+// Controllers
+const storePost = require("./controller/storePost");
+const newPost = require("./controller/newPost");
+const getPost = require("./controller/getPost");
+const home = require("./controller/home");
+
+// Store as environment variables inside .env
 const { PORT, MONGODB_URL } = process.env;
 
-//Connect app to the mongodb database
+// Connect app to the mongodb database
 mongoose.connect(MONGODB_URL, { useNewUrlParser: true });
 
-//Create Express app
+// Create Express app
 const app = express();
+// Setting up ejs as the default view engine
 app.set("view engine", "ejs");
 
-//middleware
+// Middleware
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(fileUpload());
 
-//Routes
-app.get("/", async (req, res) => {
-  const blogposts = await BlogPost.find({});
-  res.render("index", {
-    blogposts,
-  }); //This is ejs/html file in views folder
-});
+app.use("/posts/store", validateMiddleWare);
 
-app.get("/about", (req, res) => {
-  res.render("about");
-});
+// Routes
+app.get("/", home);
+app.get("/post/:id", getPost);
+app.get("/posts/new", newPost);
+app.post("/posts/store", storePost);
 
-app.get("/contact", (req, res) => {
-  res.render("contact");
-});
-
-app.get("/post/:id", async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id);
-  res.render("post", {
-    blogpost,
-  });
-});
-app.get("/posts/new", (req, res) => {
-  res.render("create");
-});
-app.post("/posts/store", async (req, res) => {
-  await BlogPost.create(req.body, (error, blogpost) => {
-    console.log("new date create: ", blogpost, error);
-    res.redirect("/");
-  });
-});
-
-//Server
+// Server
 app.listen(PORT, () => {
   console.log("listening on Port " + PORT);
 });
